@@ -6,15 +6,34 @@ This repository is only for ephemeral Linux development containers, including Gi
 
 The installer expects an Ubuntu/Debian-based image with passwordless `sudo`, Node.js with npm, Git, curl, and Bash. It is intentionally not portable to macOS, Windows, or non-Debian container images.
 
+Chezmoi manages the home-directory configuration in [`home/`](home/). [`.chezmoiroot`](.chezmoiroot) makes it the source state while leaving the installer, documentation, skills, and agent-log implementation at the repository root. Each supported client receives per-skill symlinks to the shared source under [`config/skills/`](config/skills/).
+
 ## Install
 
-Both GitHub Codespaces and DevPod recognize the root [`install.sh`](install.sh) entry point automatically. It is executable in Git and must remain at the repository root.
+Both GitHub Codespaces and DevPod recognize the root [`install.sh`](install.sh) entry point automatically. It is executable in Git and must remain at the repository root. It installs chezmoi to `~/.local/bin` when needed, initializes it from this checkout, and applies the source state.
 
 Set `REPOSITORY_LOCATION` to the repository being developed before the installer runs. The installer uses it to build the `code-review-graph` index.
 
 GitHub Codespaces runs the selected dotfiles repository only for new codespaces. Select this repository and enable automatic installation in [Codespaces settings](https://github.com/settings/codespaces). Use VS Code Settings Sync separately for user-scoped VS Code settings, extensions, keybindings, and UI state.
 
 For DevPod, pass this repository with `--dotfiles`, or set `DOTFILES_URL` and `DOTFILES_SCRIPT=install.sh` on the DevPod context. Provide credentials through the workspace or provider's secret/environment-variable configuration, never through repository files.
+
+## Updating configuration
+
+Edit files below [`home/`](home/) when changing a managed destination file. Chezmoi maps `dot_` path components to leading dots; for example, [`home/dot_claude/settings.json`](home/dot_claude/settings.json) is deployed as `~/.claude/settings.json`.
+
+Scripts prefixed `run_once_after_` run once per chezmoi state directory, so they install the base toolchain and build the initial graph index. Scripts prefixed `run_after_` run on every apply and are used for idempotent configuration and opt-in log-export setup. Run `chezmoi diff` before applying manual changes to inspect the managed-file delta.
+
+### Adding a skill
+
+1. Under [`config/skills/`](config/skills/), create `<name>/SKILL.md` with the skill's frontmatter and instructions.
+2. Add a `symlink_<name>.tmpl` file under each client directory: [`home/dot_claude/skills/`](home/dot_claude/skills/), [`home/dot_codex/skills/`](home/dot_codex/skills/), and [`home/dot_agents/skills/`](home/dot_agents/skills/). Its content must be:
+
+    ```text
+    {{ .chezmoi.sourceDir }}/../config/skills/<name>
+    ```
+
+3. Run `chezmoi apply` and confirm each client can discover the new skill.
 
 ## Agent log archiver
 

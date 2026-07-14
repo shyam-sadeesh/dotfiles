@@ -12,7 +12,7 @@ Chezmoi manages the home-directory configuration in [`home/`](home/). [`.chezmoi
 
 Both GitHub Codespaces and DevPod recognize the root [`install.sh`](install.sh) entry point automatically. It is executable in Git and must remain at the repository root. It installs chezmoi to `~/.local/bin` when needed, initializes it from this checkout, and applies the source state.
 
-The installer builds the `code-review-graph` index for `GITHUB_WORKSPACE` when it is a Git worktree. Otherwise, it selects the only Git worktree immediately below `/workspaces`. Set `REPOSITORY_LOCATION` only when more than one worktree is present or the repository is elsewhere.
+The installer builds the `code-review-graph` index for `GITHUB_WORKSPACE` or `CODESPACE_VSCODE_FOLDER` when either is a Git worktree. Otherwise, it selects the only Git worktree immediately below `/workspaces`. Set `REPOSITORY_LOCATION` only when more than one worktree is present or the repository is elsewhere.
 
 GitHub Codespaces runs the selected dotfiles repository only for new codespaces. Select this repository and enable automatic installation in [Codespaces settings](https://github.com/settings/codespaces). Use VS Code Settings Sync separately for user-scoped VS Code settings, extensions, keybindings, and UI state.
 

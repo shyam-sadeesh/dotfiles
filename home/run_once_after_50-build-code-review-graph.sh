@@ -14,10 +14,12 @@ resolve_repository_location() {
 		return
 	fi
 
-	if [ -n "${GITHUB_WORKSPACE:-}" ] && root="$(git_root "$GITHUB_WORKSPACE")"; then
-		printf '%s\n' "$root"
-		return
-	fi
+	for path in "${GITHUB_WORKSPACE:-}" "${CODESPACE_VSCODE_FOLDER:-}"; do
+		if [ -n "$path" ] && root="$(git_root "$path")"; then
+			printf '%s\n' "$root"
+			return
+		fi
+	done
 
 	declare -A roots=()
 	while IFS= read -r -d '' path; do

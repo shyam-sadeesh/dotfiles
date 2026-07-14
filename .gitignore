@@ -1,0 +1,4 @@
+# Local environment files may contain workspace credentials.
+.env
+.env.*
+!.env.example

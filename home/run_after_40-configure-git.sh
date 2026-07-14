@@ -2,6 +2,9 @@
 
 set -euo pipefail
 
+log() { printf '[dotfiles] Git: %s\n' "$*"; }
+
+log "Applying global Git configuration."
 git config --global push.autoSetupRemote true
 git config --global alias.st 'status --short --branch'
 git config --global alias.aa 'add --all'
@@ -17,3 +20,4 @@ git config --global alias.acp '!git add --all && git commit --amend --no-edit &&
 touch "$HOME/.bash_aliases"
 grep -qxF "alias find='fdfind'" "$HOME/.bash_aliases" || echo "alias find='fdfind'" >> "$HOME/.bash_aliases"
 grep -qxF "alias grep='rg'" "$HOME/.bash_aliases" || echo "alias grep='rg'" >> "$HOME/.bash_aliases"
+log "Global Git configuration complete."

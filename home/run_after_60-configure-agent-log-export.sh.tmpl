@@ -2,17 +2,25 @@
 
 set -euo pipefail
 
-[ "${EXPORT_LOGS:-0}" = "1" ] || exit 0
+log() { printf '[dotfiles] agent-log export: %s\n' "$*"; }
+
+if [ "${EXPORT_LOGS:-0}" != "1" ]; then
+  log "Skipped; EXPORT_LOGS is not enabled."
+  exit 0
+fi
 
 source_dir='{{ .chezmoi.sourceDir }}'
 repository_dir="$(cd "$source_dir/.." && pwd)"
 
+log "Installing export dependencies."
 sudo apt-get install -y rclone sqlite3
 
+log "Installing archiver."
 install_dir="$HOME/.local/share/dotfiles/agent-logging"
 mkdir -p "$install_dir"
 install -m 0755 "$repository_dir/agent-logging/archiver.sh" "$install_dir/archiver.sh"
 
+log "Configuring shell launcher."
 launcher='if [ -n "${AGENT_LOG_REMOTE:-}" ]; then setsid bash "$HOME/.local/share/dotfiles/agent-logging/archiver.sh" run </dev/null >>/tmp/agent-log-archiver.log 2>&1 & fi'
 touch "$HOME/.bashrc"
 for setting in \
@@ -25,3 +33,4 @@ for setting in \
   grep -qxF "$setting" "$HOME/.bashrc" || printf '%s\n' "$setting" >> "$HOME/.bashrc"
 done
 grep -qxF "$launcher" "$HOME/.bashrc" || printf '\n%s\n' "$launcher" >> "$HOME/.bashrc"
+log "Export setup complete."

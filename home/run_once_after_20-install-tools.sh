@@ -7,7 +7,7 @@ log() { printf '[dotfiles] tools: %s\n' "$*"; }
 log "Starting tool installation."
 log "Installing APT packages."
 sudo apt-get update
-sudo apt-get install -y fd-find pipx ripgrep
+sudo apt-get install -y fd-find pipx ripgrep vim
 
 log "Installing pinned npm packages."
 npm install -g \

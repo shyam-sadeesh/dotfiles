@@ -64,14 +64,7 @@ Severity definitions:
 * **Warning:** A meaningful deviation from repository conventions or quality standards. Should be fixed.
 * **Suggestion:** An optional improvement.
 
-Walk through the findings with me. Address the agreed items. Apply the repository quality gates (tests/lints/etc.)
-
-## 5. Create the Pull Request
-
-Create a pull request that includes:
-
-* A summary of the implemented behaviour.
-* Tests added or updated.
-* Quality gates run and their results.
-* Any unresolved limitations or agreed follow-up work.
-* Which issue the PR closes (if any).
+Walk through the findings with me and ask me which ones to address.
+Address the agreed items.
+Apply the repository quality gates (tests/lints/etc.)
+Create a Pull Request, follow the contributing guidance.

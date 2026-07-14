@@ -13,13 +13,15 @@
 #   archiver.sh run    # loop every $AGENT_LOG_INTERVAL (postStart)
 #
 # Config (env):
-#   AGENT_LOG_REMOTE     rclone dest ("r2:my-bucket" or a local path). REQUIRED.
+#   R2_BUCKET            Cloudflare R2 bucket name. REQUIRED.
+#   R2_ACCOUNT_ID        Cloudflare account id. REQUIRED.
+#   R2_ACCESS_KEY_ID     R2 API token access key id. REQUIRED.
+#   R2_SECRET_ACCESS_KEY R2 API token secret access key. REQUIRED.
 #   AGENT_LOG_PREFIX     key prefix under the remote. Default "agent-logs".
 #   AGENT_LOG_INTERVAL   seconds between passes in `run`. Default 60.
 #   AGENT_LOG_HOST_ID    per-container id. Auto-derived if unset.
 #   AGENT_LOG_STATE_DIR  cursor/state dir. Default namespaces state by remote.
 #   OPENCODE_DELTA_SQL / OPENCODE_CURSOR_SQL   opencode queries; pinned defaults below.
-#   RCLONE_CONFIG_R2_*   R2 config from the environment (no rclone config file).
 
 set -euo pipefail
 
@@ -29,26 +31,33 @@ AGENT_LOG_PREFIX="${AGENT_LOG_PREFIX:-agent-logs}"
 AGENT_LOG_INTERVAL="${AGENT_LOG_INTERVAL:-60}"
 LOCKFILE="${AGENT_LOG_LOCKFILE:-/tmp/agent-log-archiver.lock}"
 
+log() { printf '%s agent-log-archiver: %s\n' "$(date -u +%FT%TZ)" "$*" >&2; }
+
+R2_BUCKET="${R2_BUCKET:-}"
+R2_ACCOUNT_ID="${R2_ACCOUNT_ID:-}"
+R2_ACCESS_KEY_ID="${R2_ACCESS_KEY_ID:-}"
+R2_SECRET_ACCESS_KEY="${R2_SECRET_ACCESS_KEY:-}"
+
+if [ -z "$R2_BUCKET" ] || [ -z "$R2_ACCOUNT_ID" ] || [ -z "$R2_ACCESS_KEY_ID" ] || [ -z "$R2_SECRET_ACCESS_KEY" ]; then
+  log "R2_* vars missing; set R2_BUCKET, R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY."
+  exit 0
+fi
+
+AGENT_LOG_REMOTE="r2:${R2_BUCKET}"
+export RCLONE_CONFIG_R2_ENDPOINT="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+export RCLONE_CONFIG_R2_ACCESS_KEY_ID="$R2_ACCESS_KEY_ID"
+export RCLONE_CONFIG_R2_SECRET_ACCESS_KEY="$R2_SECRET_ACCESS_KEY"
+
 # Cursors are namespaced by remote so a manual `once` against a scratch remote
 # (see README) can't advance the live loop's cursors and make production skip
 # unshipped data. Override wholesale with AGENT_LOG_STATE_DIR.
-_state_slug="$(printf '%s' "${AGENT_LOG_REMOTE:-none}" | tr -c 'A-Za-z0-9._-' '-')"
+_state_slug="$(printf '%s' "${AGENT_LOG_REMOTE}" | tr -c 'A-Za-z0-9._-' '-')"
 STATE_DIR="${AGENT_LOG_STATE_DIR:-$HOME/.agent-log-archiver/state/$_state_slug}"
 
 # R2 settings all come from RCLONE_CONFIG_R2_* env vars, so there is no config
 # file. Point rclone at /dev/null so it stops logging a "config file not found"
 # NOTICE on every pass. Overridable if a caller has a real config.
 export RCLONE_CONFIG="${RCLONE_CONFIG:-/dev/null}"
-
-log() { printf '%s agent-log-archiver: %s\n' "$(date -u +%FT%TZ)" "$*" >&2; }
-
-# Unset remote, or a remote with no bucket ("r2:" when R2_BUCKET is unset) -> no-op.
-case "${AGENT_LOG_REMOTE:-}" in
-  "" | *:)
-    log "AGENT_LOG_REMOTE unset or missing a bucket (got '${AGENT_LOG_REMOTE:-}'); nothing to do."
-    exit 0
-    ;;
-esac
 
 # Stable per-container id so concurrent containers don't collide under host=<id>/.
 derive_host_id() {

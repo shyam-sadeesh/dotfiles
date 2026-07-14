@@ -21,7 +21,7 @@ mkdir -p "$install_dir"
 install -m 0755 "$repository_dir/agent-logging/archiver.sh" "$install_dir/archiver.sh"
 
 log "Configuring shell launcher."
-launcher='if [ -n "${AGENT_LOG_REMOTE:-}" ]; then setsid bash "$HOME/.local/share/dotfiles/agent-logging/archiver.sh" run </dev/null >>/tmp/agent-log-archiver.log 2>&1 & fi'
+launcher='if [ -n "${R2_BUCKET:-}" ]; then setsid bash "$HOME/.local/share/dotfiles/agent-logging/archiver.sh" run </dev/null >>/tmp/agent-log-archiver.log 2>&1 & fi'
 touch "$HOME/.bashrc"
 for setting in \
   'export RCLONE_CONFIG_R2_TYPE=s3' \

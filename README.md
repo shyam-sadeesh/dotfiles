@@ -68,29 +68,22 @@ Create a scoped R2 API token (**Object Read & Write**, one bucket), then expose 
 
 | Variable | What |
 | --- | --- |
-| `AGENT_LOG_REMOTE` | Destination, normally `r2:<bucket>` |
-| `RCLONE_CONFIG_R2_ENDPOINT` | `https://<account-id>.r2.cloudflarestorage.com` |
-| `RCLONE_CONFIG_R2_ACCESS_KEY_ID` | Scoped R2 token's access key id |
-| `RCLONE_CONFIG_R2_SECRET_ACCESS_KEY` | That token's secret |
+| `R2_BUCKET` | Destination bucket name |
+| `R2_ACCOUNT_ID` | Cloudflare account id |
+| `R2_ACCESS_KEY_ID` | Scoped R2 token's access key id |
+| `R2_SECRET_ACCESS_KEY` | That token's secret |
 
-When `EXPORT_LOGS` is not `1`, the installer does not install the export dependencies or configure the archiver. When enabled, the installer supplies the non-secret Cloudflare R2 backend defaults. If `AGENT_LOG_REMOTE` is unset, the installed archiver does not start. Other knobs (interval, opencode queries) are in `archiver.sh`'s header.
+When `EXPORT_LOGS` is not `1`, the installer does not install the export dependencies or configure the archiver. When enabled, the installer supplies the non-secret Cloudflare R2 backend defaults. The installed archiver runs only when `R2_BUCKET` is set, and it exports only when all required R2 credentials are present (`R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`). Other knobs (interval, opencode queries) are in `archiver.sh`'s header.
 
 ### Security
 
-Transcripts contain plaintext secrets typed or echoed in sessions — keep the bucket **private**, scope the token to it alone, and set a short **lifecycle expiry**. Credential *files* are excluded by whitelist and opencode's DB (which holds tokens) is never shipped, only its session tables — but secrets embedded in transcript *text* are not scrubbed.
+ Credential *files* are excluded by whitelist and opencode's DB (which holds tokens) is never shipped, only its session tables — but secrets embedded in transcript *text* are not scrubbed.
 
 ### Startup
 
-The installer adds a guarded launcher to `~/.bashrc`. It starts after the first interactive shell opens and only when `AGENT_LOG_REMOTE` is set. The archiver's lock prevents later shells from starting duplicate loops.
+The installer adds a guarded launcher to `~/.bashrc`. It starts after the first interactive shell opens when `R2_BUCKET` is set; the archiver then checks for all required R2 variables (`R2_BUCKET`, `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`) before exporting. The archiver's lock prevents later shells from starting duplicate loops.
 
-### Run manually
-
-```bash
-# A bare local path works as a remote, so you can test the layout without R2:
-AGENT_LOG_REMOTE=/tmp/r2sim bash ~/.local/share/dotfiles/agent-logging/archiver.sh once
-```
-
-State (cursors) is namespaced by remote, so a `once` against a scratch remote keeps its own cursors and won't make the live R2 loop skip unshipped data. To point a test at the *same* remote as the running loop without touching its state, set an isolated `AGENT_LOG_STATE_DIR`.
+State (cursors) is namespaced by remote, so changing `R2_BUCKET` keeps separate cursors and won't make the live loop skip unshipped data. To point a test at the same bucket without touching live cursor state, set an isolated `AGENT_LOG_STATE_DIR`.
 
 The start-up loop logs to `/tmp/agent-log-archiver.log` and is a singleton: the `run` mode holds an `flock` on `/tmp/agent-log-archiver.lock` for its lifetime, so later interactive shells do not double-spawn it. `once` is unlocked and meant for manual tests.
 

@@ -176,12 +176,15 @@ collect_opencode() {
   [ -n "$newmax" ] || { log "opencode: no rows, skip"; return 0; }
   if [ "$newmax" = "$cursor" ]; then log "opencode: unchanged, skip"; return 0; fi
 
+  # Explicit cleanup at each exit (as collect_filelog does). A `trap ... RETURN`
+  # here is not function-scoped without `set -T`, so it lingers and re-fires on
+  # the caller's return when $stage is out of scope -> `set -u` abort.
   local stage; stage="$(mktemp -d)"
-  trap 'rm -rf "$stage"' RETURN
 
   if ! sqlite3 -readonly "$db" "${OPENCODE_DELTA_SQL//__CURSOR__/$cursor}" >"$stage/rows.tsv" 2>/dev/null \
      || [ ! -s "$stage/rows.tsv" ]; then
     log "opencode: delta empty/failed (schema drift?); skipping — will NOT ship raw DB (holds secrets)"
+    rm -rf "$stage"
     return 0
   fi
 
@@ -202,6 +205,7 @@ collect_opencode() {
   else
     log "opencode: rclone copy failed (nonfatal)"
   fi
+  rm -rf "$stage"
 }
 
 ship_manifest() {

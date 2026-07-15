@@ -5,7 +5,7 @@ set -euo pipefail
 log() { printf '[dotfiles] code-review-graph: %s\n' "$*"; }
 
 git_root() {
-	git -C "$1" rev-parse --show-toplevel 2>/dev/null
+	git -c safe.directory='*' -C "$1" rev-parse --show-toplevel 2>/dev/null
 }
 
 resolve_repository_location() {
@@ -45,6 +45,7 @@ resolve_repository_location() {
 }
 
 repository_location="$(resolve_repository_location)"
+git config --global --add safe.directory "$repository_location"
 log "Building index for $repository_location."
 code-review-graph build --repo "$repository_location"
 log "Index build complete."

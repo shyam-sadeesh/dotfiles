@@ -170,6 +170,6 @@ Where possible use examples to demonstrate the issue.
 
 Lead with structural regressions and missed simplifications before naming, style, or local cleanup.
 
-| ID  | Severity                       | Finding             | Why it matters | Better shape                                             |
+| ID  | Severity                       | Finding             | Why it matters | Recommendation                                             |
 | --- | ------------------------------ | ------------------- | -------------- | -------------------------------------------------------- |
-| 1   | Blocker / Warning / Suggestion | [what you observed] | [consequence]  | [what a stronger design looks like, in words - not code] |
+| 1   | Blocker / Warning / Suggestion | [what you observed] | [consequence]  | [Recommended design or fix] |

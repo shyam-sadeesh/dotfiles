@@ -39,32 +39,4 @@ Perform the below checks on your changes. Address unmet checks before proceeding
 * [ ] Affected fixtures, scripts, snapshots, generated artifacts, and documentation are updated.
 * [ ] No suppressions, stubs, silent fallbacks, or workarounds hide an underlying problem.
 
-Run the simplest possible quality gates to verify your changes (formatting/linting/single file tests, etc.)
-
-## 4. Review
-
-Ask me if I want an independent review - if I say yes, run three independent reviews. Otherwise proceed to the next step.
-
-**do not review the change on the originating model yourself.**
-**For all reviews, tell the agents to NOT run any quality gates (tests/lints)**
-
-1. **Fresh same-model subagent:** review using `/design-review`.
-2. **Peer model:** review using `/consult`, with the peer applying `/design-review`.
-3. **Fresh tiny-model (haiku, 5.4-mini) subagent:** check the code for bugs, faulty or missing logic. Do not use the design-review skill. 
-
-Consolidate duplicate findings and present one table:
-
-| ID | Severity                       | Finding           | Why it matters  | Better shape                      |
-| -- | ------------------------------ | ----------------- | --------------- | --------------------------------- |
-| 1  | Blocker / Warning / Suggestion | What was observed | The consequence | What a stronger design looks like |
-
-Severity definitions:
-
-* **Blocker:** Incorrect behaviour, failing checks, architectural violation, significant technical debt, or an issue that blocks future work. Must be fixed before merge.
-* **Warning:** A meaningful deviation from repository conventions or quality standards. Should be fixed.
-* **Suggestion:** An optional improvement.
-
-Walk through the findings with me and ask me which ones to address.
-Address the agreed items.
-Apply the repository quality gates (tests/lints/etc.)
-Create a Pull Request, follow the contributing guidance.
+Apply the repository quality gates (tests/lints/etc.), then create a Pull Request, follow the contributing guidance. I

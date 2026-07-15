@@ -17,5 +17,7 @@ else
 fi
 
 log "Applying chezmoi source state."
+upstream_url="$(git -C "$dotfiles_dir" remote get-url origin)"
 chezmoi init "$dotfiles_dir" --apply
+git -C "$(chezmoi source-path)/.." remote set-url origin "$upstream_url"
 log "Dotfiles setup complete."

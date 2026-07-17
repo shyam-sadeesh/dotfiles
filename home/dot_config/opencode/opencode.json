@@ -6,5 +6,6 @@
       "command": ["uvx", "code-review-graph", "serve"]
     }
   },
-  "lsp": true
+  "lsp": true,
+  "permission": "allow"
 }

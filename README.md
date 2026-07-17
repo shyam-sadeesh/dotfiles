@@ -27,7 +27,7 @@ Scripts prefixed `run_once_after_` run once per chezmoi state directory, so they
 ### Adding a skill
 
 1. Under [`config/skills/`](config/skills/), create `<name>/SKILL.md` with the skill's frontmatter and instructions.
-2. Add a `symlink_<name>.tmpl` file under each client directory: [`home/dot_claude/skills/`](home/dot_claude/skills/), [`home/dot_codex/skills/`](home/dot_codex/skills/), and [`home/dot_agents/skills/`](home/dot_agents/skills/). Its content must be:
+2. Add a `symlink_<name>.tmpl` file under each client directory: [`home/dot_claude/skills/`](home/dot_claude/skills/) and [`home/dot_agents/skills/`](home/dot_agents/skills/). Its content must be:
 
     ```text
     {{ .chezmoi.sourceDir }}/../config/skills/<name>

@@ -1,7 +1,7 @@
 {
   "theme": "auto",
   "permissions": {
-    "defaultMode": "bypassPermissions",
+    "defaultMode": "acceptEdits",
     "deny": [
       "Read(**/uv.lock)",
       "Read(**/package-lock.json)",
@@ -15,6 +15,18 @@
   "enabledMcpjsonServers": [
     "code-review-graph"
   ],
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "typescript-lsp@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    }
+  },
   "autoMemoryEnabled": false,
   "hooks": {
     "PostToolUse": [

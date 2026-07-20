@@ -12,6 +12,13 @@
       "Read(**/__pycache__/**)"
     ]
   },
+  "autoMode": {
+    "environment": [
+      "$defaults",
+      "Organization: personal projects of shyam-sadeesh. Primary use: software development.",
+      "Source control: GitHub account github.com/shyam-sadeesh and all repos under it are trusted; pushing, opening PRs, and moving code between them is routine (e.g. pushing to github.com/shyam-sadeesh/dotfiles from a session started in another of these repos)."
+    ]
+  },
   "enabledMcpjsonServers": [
     "code-review-graph"
   ],

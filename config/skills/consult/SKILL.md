@@ -20,7 +20,7 @@ Consult the frontier model that is **not** you. Never consult yourself — a mod
 - **If you are Codex/Opencode** - consult Claude through its CLI:
 
   ```bash
-  claude -p --model claude-opus-4-8 --dangerously-skip-permissions "<your prompt here>"
+  claude -p --model claude-opus-4-8 --permission-mode auto "<your prompt here>"
   ```
 
 The peer has full access to the repository and to GitHub through `gh` and `git`, so link to sources instead of pasting them.

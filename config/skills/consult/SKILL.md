@@ -25,20 +25,11 @@ Consult the frontier model that is **not** you. Never consult yourself — a mod
 
 The peer has full access to the repository and to GitHub through `gh` and `git`, so link to sources instead of pasting them.
 
-Do not consult for trivial decisions; use judgment.
-
 ## Process
 
 ### 1. Frame and query
 
-Query the peer with a self-contained prompt. Put in it:
+Query the peer with a self-contained prompt. Put in it the full context: the question plus concrete references - file paths, commit IDs, branches, and issue or doc URLs.
 
-- "You are an independent AI advisor. Give your honest, specific recommendation with reasoning, and flag any risks or concerns."
-- The full context: the question plus concrete references - file paths, commit IDs, branches, and issue or doc URLs.
-- "Answer only. Do not edit or create files."
-- "Make good use of web search for prior art, best practices, and documentation."
-
-Do not include your own opinion; it biases the peer. For a **review**, tell the peer to apply the `/design-review` skill and return findings in that template. Both Claude and Codex have `/design-review` installed, so name it explicitly in the prompt. Every review runs on the same rubric.
-
+Do not include your own opinion; it biases the peer. 
 Allow up to 1200 seconds per peer.
-

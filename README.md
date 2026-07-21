@@ -24,6 +24,18 @@ Edit files below [`home/`](home/) when changing a managed destination file. Chez
 
 Scripts prefixed `run_once_after_` run once per chezmoi state directory, so they install the base toolchain and build the initial graph index. Scripts prefixed `run_after_` run on every apply and are used for idempotent configuration and opt-in log-export setup. Run `chezmoi diff` before applying manual changes to inspect the managed-file delta.
 
+### Resyncing a live workspace
+
+To pull changes you have pushed to this repository into an already-provisioned workspace, without reprovisioning it:
+
+```sh
+chezmoi update
+```
+
+`chezmoi update` fetches from `origin` (`git pull --autostash --rebase`) and applies the new source state. It works because [`install.sh`](install.sh) resets the source repository's `origin` to the upstream URL after `chezmoi init`, so the source directory tracks this repository rather than the initial local checkout. Preview first with `chezmoi diff`; run `chezmoi source-path` if you need the local source checkout.
+
+`run_once_after_` scripts do not re-run on update unless their contents changed, so a resync applies configuration, skill, and `run_after_` changes but not the one-time toolchain install or initial graph build. Reprovision the workspace when you need those to run again.
+
 ### Adding a skill
 
 1. Under [`config/skills/`](config/skills/), create `<name>/SKILL.md` with the skill's frontmatter and instructions.

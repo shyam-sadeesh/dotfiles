@@ -2,6 +2,6 @@ sandbox_mode = "danger-full-access"
 approval_policy = "never"
 
 [mcp_servers.code-review-graph]
-command = "uvx"
+command = "pipx"
 args = ["code-review-graph", "serve"]
 type = "stdio"

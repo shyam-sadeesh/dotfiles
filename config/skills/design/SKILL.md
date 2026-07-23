@@ -74,7 +74,7 @@ Then, share the problem statement with /consult to get a view of how to solve it
 
 ### 4. Draft the Design Document
 
-Write the document into `.collateral/<GH issue-number OR slug>/` using the template below. If you have not been given an issue number or slug, ask me for one.
+Write the document using the template below. If I have not given you a location for the design, ask for one.
 
 Out-of-scope items and Design Decisions MUST be confirmed by me before proceeding.
 

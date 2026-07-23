@@ -1,9 +1,9 @@
 ---
-name: design-review
+name: review
 description: Produce a critique of an architecture document, design document, or code change. Use when asked to review designs or code.
 ---
 
-# Design Review
+# Review
 
 ## When to Use
 
@@ -50,11 +50,11 @@ Benchmark when the design leans on a pattern with established prior art and you 
 
 Evaluate the design against these lenses while following Raymond's Philosophy. Use tables to organize findings. Use a Mermaid or ASCII diagram for the one or two highest-impact structural findings when layering or call path is clearer as a picture than a table row. Do not diagram for its own sake; if a table says it clearly, leave it as a table.
 
-
-- Completeness and correctness of vision
+- Completeness and correctness
   - Does the design or implementation actually solve the problem, or does it solve a different problem?
   - Has the design or code accounted for how the change moves through the codebase, such as how a change to the first step of a multi-step pipeline affects later steps?
-
+  - Can you identify scenarios that have been missed - ideally by constructing new unit tests, or submitting data?
+  
 - Boundary quality - Are boundaries drawn where change is likely? Do things that change together live together?
   - Is I/O (file upload read, clipboard, `localStorage`, clock, randomness) happening inside logic that could be pure? Can it move to the boundary (event handler or effect)?
   - Is module-level mutable state being read or written? Is that unavoidable, or should it live in the store?
@@ -168,7 +168,7 @@ Suggestion => optional improvement. Take it or leave it.
 Where possible use examples to demonstrate the issue.
 -->
 
-Lead with structural regressions and missed simplifications before naming, style, or local cleanup.
+Lead with bugs, structural regressions and missed simplifications before naming, style, or local cleanup.
 
 | ID  | Severity                       | Finding             | Why it matters | Recommendation                                             |
 | --- | ------------------------------ | ------------------- | -------------- | -------------------------------------------------------- |

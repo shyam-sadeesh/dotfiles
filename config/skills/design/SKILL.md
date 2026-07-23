@@ -74,7 +74,7 @@ Then, share the problem statement with /consult to get a view of how to solve it
 
 ### 4. Draft the Design Document
 
-Write the document into `.collateral/<GH issue-number OR slug>/` using the template below. If you have not been given an issue number or slug, ask me for one.
+Write the document using the template below. If I have not given you a location for the design, ask for one.
 
 Out-of-scope items and Design Decisions MUST be confirmed by me before proceeding.
 
@@ -151,8 +151,8 @@ Things that need to be addressed or answered before proceeding with implementati
 
 Run two independent reviews; do not review the design on the originating model yourself.
 
-1. **Fresh same-model subagent:** run the `/design-review` skill over the document.
-2. **Peer model:** use the `/consult` skill. Give the peer the design file path (it reads the file directly) and tell it this is a review, so it applies the `/design-review` skill. **This step is mandatory.**
+1. **Fresh same-model subagent:** run the `/review` skill over the document.
+2. **Peer model:** use the `/consult` skill. Give the peer the design file path (it reads the file directly) and tell it this is a review, so it applies the `/review` skill. **This step is mandatory.**
 
 Consolidate both reviews, then improve the design.
 

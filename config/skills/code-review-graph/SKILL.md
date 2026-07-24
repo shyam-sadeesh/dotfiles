@@ -11,6 +11,7 @@ Tool names may appear with a server-generated `_tool` suffix in some clients. Th
 
 ## Conventions
 
+- Run `code-review-graph build` before use so the graph picks up changes since it was last built; a stale index silently returns results for old code.
 - Omit `repo_root` to use the current repository. Pass it to select another indexed repository.
 - Pass repository-relative paths in `changed_files`.
 - Where supported, `detail_level="minimal"` returns compact summaries and key entities; `detail_level="standard"` returns structured node, edge, file, or source detail.

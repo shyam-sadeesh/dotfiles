@@ -3,7 +3,7 @@
   "mcp": {
     "code-review-graph": {
       "type": "local",
-      "command": ["pipx", "code-review-graph", "serve"]
+      "command": ["code-review-graph", "serve"]
     }
   },
   "lsp": true,

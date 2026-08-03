@@ -161,9 +161,8 @@ Before delivering findings, check:
 # Review Template
 
 <!--
-Blocker => incorrect behaviour, broken build, failing tests, architectural violation, significant technical debt, obvious structural regression, spaghetti branching, or unnecessary complexity that blocks future functionality. Must fix before merge.
-Warning => deviation from conventions or quality standards. Should be fixed.
-Suggestion => optional improvement. Take it or leave it.
+Blocker => wrong/missing/out-of-scope functionality, or significant technical debt such as spaghetti branching, or unnecessary complexity that blocks future functionality. Must fix before merge.
+Suggestion => optional code quality improvement that does not change functionality. Take it or leave it.
 
 Where possible use examples to demonstrate the issue.
 -->
@@ -172,4 +171,4 @@ Lead with bugs, structural regressions and missed simplifications before naming,
 
 | ID  | Severity                       | Finding             | Why it matters | Recommendation                                             |
 | --- | ------------------------------ | ------------------- | -------------- | -------------------------------------------------------- |
-| 1   | Blocker / Warning / Suggestion | [what you observed] | [consequence]  | [Recommended design or fix] |
+| 1   | Blocker / Suggestion | [what you observed] | [consequence]  | [Recommended design or fix] |
